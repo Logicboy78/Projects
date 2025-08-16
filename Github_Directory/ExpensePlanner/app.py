@@ -1,30 +1,10 @@
-import os
-import sqlite3
+# app.py
 from flask import Flask, request, jsonify, send_from_directory
+from Database.database import init_db, add_user, get_user_by_email
 
 app = Flask(__name__, static_folder='.', static_url_path='')
 
-DB_PATH = 'Expense_Planner.db'
-
-# -----------------------------
-# Initialize Database
-# -----------------------------
-def init_db():
-    """Ensure the SQLite database and users table exist."""
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      email TEXT NOT NULL UNIQUE,
-      password TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-    """)
-    conn.commit()
-    conn.close()
-
+# Initialize DB
 init_db()
 
 # -----------------------------
@@ -33,27 +13,17 @@ init_db()
 @app.route('/api/auth/signup', methods=['POST'])
 def signup():
     data = request.get_json() or {}
-    name     = data.get('name', '').strip()
-    email    = data.get('email', '').strip().lower()
+    name = data.get('name', '').strip()
+    email = data.get('email', '').strip().lower()
     password = data.get('password', '').strip()
 
-    # Validate input
-    if not name or not email or not password:
+    if not all([name, email, password]):
         return jsonify(error='All fields (name, email, password) are required.'), 400
 
-    # DEV ONLY: store plaintext passwords for easy DB view
     try:
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        c.execute(
-            "INSERT INTO users (name, email, password) VALUES (?, ?, ?);",
-            (name, email, password)
-        )
-        conn.commit()
-    except sqlite3.IntegrityError:
+        add_user(name, email, password)
+    except Exception:
         return jsonify(error='Email is already registered.'), 409
-    finally:
-        conn.close()
 
     return jsonify(message='Signup successful.'), 201
 
@@ -63,26 +33,16 @@ def signup():
 @app.route('/api/auth/login', methods=['POST'])
 def login():
     data = request.get_json() or {}
-    email    = data.get('email', '').strip().lower()
+    email = data.get('email', '').strip().lower()
     password = data.get('password', '').strip()
 
-    if not email or not password:
+    if not all([email, password]):
         return jsonify(error='Email and password are required.'), 400
 
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute(
-        "SELECT password, name FROM users WHERE email = ?;",
-        (email,)
-    )
-    row = c.fetchone()
-    conn.close()
-
-    # Compare plaintext passwords (dev mode)
+    row = get_user_by_email(email)
     if not row or row[0] != password:
         return jsonify(error='Invalid email or password.'), 401
 
-    # On success, send redirect instruction
     return jsonify(redirect='/First_Page.html', name=row[1]), 200
 
 # -----------------------------
