@@ -1,0 +1,99 @@
+/* Reset & Variables */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0A2348;
+  --card-bg: #fff;
+  --primary: #1e90ff;
+  --primary-light: #378ee8;
+  --text-dark: #1a202c;
+  --text-light: #718096;
+  --border: #e2e8f0;
+  --radius: 12px;
+  --transition: 0.3s ease;
+}
+
+body {
+  display: grid; place-items: center; height: 100vh;
+  background: var(--bg); font-family: "Inter", sans-serif;
+}
+
+/* Card */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  width: 360px; padding: 32px 24px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  text-align: center;
+}
+.card h2 {
+  color: var(--text-dark);
+  margin-bottom: 24px;
+  font-size: 1.6rem;
+}
+
+/* Tabs */
+.tabs {
+  display: flex; border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  margin-bottom: 24px;
+}
+.tabs button {
+  flex: 1; padding: 10px 0;
+  background: transparent; border: none;
+  color: var(--text-dark); cursor: pointer;
+  transition: background var(--transition);
+}
+.tabs button.active {
+  background: var(--primary); color: #fff;
+}
+
+/* Forms */
+form {
+  display: none; text-align: left;
+}
+form.active { display: block; }
+.field {
+  margin-bottom: 16px;
+}
+.field input {
+  width: 100%; padding: 12px 14px;
+  font-size: 1rem; border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color var(--transition);
+}
+.field input:focus {
+  outline: none; border-color: var(--primary);
+}
+
+/* Forgot */
+.forgot {
+  text-align: right; margin-bottom: 16px;
+}
+.forgot a {
+  font-size: .9rem; color: var(--primary);
+  text-decoration: none;
+}
+
+/* Actions */
+.actions {
+  margin-top: 8px;
+}
+.actions button {
+  width: 100%; padding: 12px;
+  background: var(--primary); color: #fff;
+  border: none; border-radius: var(--radius);
+  font-size: 1rem; cursor: pointer;
+  transition: background var(--transition);
+}
+.actions button:hover {
+  background: var(--primary-light);
+}
+
+/* Alt link */
+.alt {
+  margin-top: 20px; font-size: .9rem;
+  color: var(--text-light);
+}
+.alt a {
+  color: var(--primary); text-decoration: none;
+}

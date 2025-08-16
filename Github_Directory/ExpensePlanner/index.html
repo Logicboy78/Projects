@@ -1,1 +1,50 @@
-Hello
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Expense Planner • Auth</title>
+  <link rel="stylesheet" href="CSS/Home_Page.css"/>
+</head>
+<body>
+  <div class="card">
+    <h2>Login Form</h2>
+    <div class="tabs">
+      <button id="btn-login" class="active">Login</button>
+      <button id="btn-signup">Signup</button>
+    </div>
+
+    <form id="form-login" class="active">
+      <div class="field">
+        <input id="login-email" type="email" placeholder="Email Address" required>
+      </div>
+      <div class="field">
+        <input id="login-password" type="password" placeholder="Password" minlength="6" required>
+      </div>
+      <p class="forgot"><a href="#">Forgot password?</a></p>
+      <div class="actions">
+        <button type="submit">Login</button>
+      </div>
+      <p class="alt">Not a member? <a href="#" id="link-signup">Signup now</a></p>
+    </form>
+
+    <form id="form-signup">
+      <div class="field">
+        <input id="signup-name" type="text" placeholder="Name" required>
+      </div>
+      <div class="field">
+        <input id="signup-email" type="email" placeholder="Email Address" required>
+      </div>
+      <div class="field">
+        <input id="signup-password" type="password" placeholder="Password" minlength="6" required>
+      </div>
+      <div class="actions">
+        <button type="submit">Signup</button>
+      </div>
+      <p class="alt">Already a member? <a href="#" id="link-login">Login here</a></p>
+    </form>
+  </div>
+
+  <script src="JS_Files/Home_Page.js"></script>
+</body>
+</html>
