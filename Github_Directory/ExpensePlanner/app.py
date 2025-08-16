@@ -1,13 +1,14 @@
 import os
 import sqlite3
 from flask import Flask, request, jsonify, send_from_directory
-from flask_bcrypt import Bcrypt
 
 app = Flask(__name__, static_folder='.', static_url_path='')
-bcrypt = Bcrypt(app)
 
 DB_PATH = 'Expense_Planner.db'
 
+# -----------------------------
+# Initialize Database
+# -----------------------------
 def init_db():
     """Ensure the SQLite database and users table exist."""
     conn = sqlite3.connect(DB_PATH)
@@ -17,7 +18,7 @@ def init_db():
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       email TEXT NOT NULL UNIQUE,
-      password_hash TEXT NOT NULL,
+      password TEXT NOT NULL,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
     """)
@@ -26,42 +27,44 @@ def init_db():
 
 init_db()
 
+# -----------------------------
+# Signup Route
+# -----------------------------
 @app.route('/api/auth/signup', methods=['POST'])
 def signup():
     data = request.get_json() or {}
     name     = data.get('name', '').strip()
     email    = data.get('email', '').strip().lower()
-    password = data.get('password', '')
+    password = data.get('password', '').strip()
 
     # Validate input
     if not name or not email or not password:
         return jsonify(error='All fields (name, email, password) are required.'), 400
 
-    # Hash the password
-    pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-
-    # Insert into database
+    # DEV ONLY: store plaintext passwords for easy DB view
     try:
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         c.execute(
-            "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?);",
-            (name, email, pw_hash)
+            "INSERT INTO users (name, email, password) VALUES (?, ?, ?);",
+            (name, email, password)
         )
         conn.commit()
     except sqlite3.IntegrityError:
-        # Unique constraint on email
         return jsonify(error='Email is already registered.'), 409
     finally:
         conn.close()
 
     return jsonify(message='Signup successful.'), 201
 
+# -----------------------------
+# Login Route
+# -----------------------------
 @app.route('/api/auth/login', methods=['POST'])
 def login():
     data = request.get_json() or {}
     email    = data.get('email', '').strip().lower()
-    password = data.get('password', '')
+    password = data.get('password', '').strip()
 
     if not email or not password:
         return jsonify(error='Email and password are required.'), 400
@@ -69,28 +72,32 @@ def login():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute(
-        "SELECT password_hash, name FROM users WHERE email = ?;",
+        "SELECT password, name FROM users WHERE email = ?;",
         (email,)
     )
     row = c.fetchone()
     conn.close()
 
-    if not row or not bcrypt.check_password_hash(row[0], password):
+    # Compare plaintext passwords (dev mode)
+    if not row or row[0] != password:
         return jsonify(error='Invalid email or password.'), 401
 
     # On success, send redirect instruction
-    return jsonify(redirect='/xyz.html')
+    return jsonify(redirect='/First_Page.html', name=row[1]), 200
 
-# Serve static files from project root
+# -----------------------------
+# Serve Static Files
+# -----------------------------
 @app.route('/<path:filename>')
 def serve_static(filename):
     return send_from_directory('.', filename)
 
-# Default route
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
 
+# -----------------------------
+# Run Flask Server
+# -----------------------------
 if __name__ == '__main__':
-    # Enable debug=True during development
     app.run(host='0.0.0.0', port=3000, debug=True)
