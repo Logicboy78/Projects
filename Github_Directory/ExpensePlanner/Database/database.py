@@ -1,7 +1,8 @@
 # database.py
 import sqlite3
+import os
 
-DB_PATH = 'ExpensePlanner/Database/expense_planner.db'
+DB_PATH = os.path.join(os.path.dirname(__file__), 'Expense_Planner.db')
 
 # -----------------------------
 # Initialize Database

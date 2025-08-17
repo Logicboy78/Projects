@@ -7,6 +7,11 @@ app = Flask(__name__, static_folder='.', static_url_path='')
 # Initialize DB
 init_db()
 
+# Serve homepage
+@app.route('/')
+def home():
+    return send_from_directory('.', 'index.html')
+
 # -----------------------------
 # Signup Route
 # -----------------------------
@@ -48,6 +53,9 @@ def login():
 # -----------------------------
 # Serve Static Files
 # -----------------------------
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
 @app.route('/<path:filename>')
 def serve_static(filename):
     return send_from_directory('.', filename)
