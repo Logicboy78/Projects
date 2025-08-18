@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, request, jsonify, send_from_directory, session, render_template, redirect
+from flask import Flask, request, jsonify, send_from_directory, session
 from database.database import init_db, add_user, email_exists, validate_login
 import os
 
@@ -10,12 +10,22 @@ app.secret_key = os.urandom(24)
 init_db()
 
 # -----------------------------
-# Serve Static Files
+# Serve Landing Page
 # -----------------------------
 @app.route('/')
 def home():
     return send_from_directory('templates', 'index.html')
 
+# -----------------------------
+# Serve any HTML template dynamically
+# -----------------------------
+@app.route('/<page>.html')
+def serve_page(page):
+    return send_from_directory('templates', f'{page}.html')
+
+# -----------------------------
+# Serve other static files (CSS/JS/images)
+# -----------------------------
 @app.route('/<path:filename>')
 def serve_static(filename):
     return send_from_directory('.', filename)
@@ -60,8 +70,12 @@ def login():
     session['user_id'] = user['id'] if isinstance(user, dict) and 'id' in user else user[0]
     session['user_name'] = user['name'] if isinstance(user, dict) and 'name' in user else user[1]
 
-    return jsonify(redirect='/First_Page.html', name=session['user_name']), 200
+    # Redirect to transaction page after successful login
+    return jsonify(redirect='/templates/transaction.html', name=session['user_name']), 200
 
+# -----------------------------
+# Logout Route
+# -----------------------------
 @app.route('/api/auth/logout')
 def logout():
     session.clear()

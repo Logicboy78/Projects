@@ -1,0 +1,281 @@
+/* ---------- Base ---------- */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f8f8f8;
+  color: #333;
+}
+
+/* Layout */
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  width: 220px;
+  background: #2f3542;
+  color: white;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding-bottom: 200px;
+}
+
+/* Sidebar Menu */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Remove hyperlink styling */
+.sidebar ul li a,
+.submenu li a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  cursor: pointer;
+}
+
+.sidebar ul li a:hover,
+.submenu li a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Parent menu items */
+.sidebar ul li {
+  padding: 12px 15px;
+  margin: 8px 0;
+  cursor: pointer;
+  border-radius: 6px;
+  background: transparent;
+  transition: background 0.2s, transform 0.1s;
+}
+
+/* Hover effect for parent items */
+.sidebar ul li:hover {
+  background: #1e90ff;
+  transform: scale(1.02);
+}
+
+/* Permanent highlight for current parent */
+.sidebar ul li.current-parent {
+  background: #1e90ff;
+  transform: scale(1.02);
+}
+
+/* Submenu container */
+.submenu {
+  margin-left: 20px;
+  margin-top: 5px;
+  padding: 0;
+}
+
+/* Submenu items */
+.submenu li {
+  font-size: 16px;
+  padding: 8px 12px;
+  margin: 4px 0;
+  border-radius: 6px;
+  background: transparent;
+  transition: background 0.2s, transform 0.1s;
+}
+
+/* Submenu hover */
+.submenu li:hover {
+  background: #1e90ff;
+  transform: scale(1.02);
+}
+
+/* Permanent highlight for current page submenu */
+.submenu li.current {
+  background: #1e90ff;
+  transform: none;
+}
+
+/* ---------- Font Sizes ---------- */
+.sidebar .top-menu li.home {
+  font-size: 30px;
+}
+
+/* Parent menu items */
+.sidebar .dashboard,
+.sidebar .reports,
+.sidebar .expenses-menu,
+.sidebar .settings {
+  font-size: 25px;
+}
+
+/* Submenu items */
+.submenu .add-expense,
+.submenu .my-expenses {
+  font-size: 23px;
+}
+/* ---------- Logout Button ---------- */
+.sidebar-logout {
+  text-align: center;
+  margin-top: 40px;
+}
+
+#logout-btn {
+  padding: 18px 20px;
+  background: rgba(255, 71, 87, 0.6); /* semi-transparent red */
+  border: none;
+  color: white;
+  font-size: 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+#logout-btn i {
+  font-size: 25px;
+}
+
+#logout-btn:hover {
+  background: #e84118;
+  transform: scale(1.05);
+}
+
+/* ---------- Main content ---------- */
+.main-content {
+  flex: 1;
+  background: #fff;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top breadcrumb / nav */
+.top-nav {
+  background: #f1f3f6;
+  padding: 12px 20px;
+  margin-top: 10px;
+  margin-bottom: 100px;
+  border-radius: 6px;
+  font-size: 25px;
+  font-weight: 550;
+  color: #333;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* ---------- FORM CARD ---------- */
+.form-section {
+  background: #fafafa;
+  padding: 25px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+label {
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: none;
+  height: 70px;
+}
+
+select {
+  font-size: 14px;
+}
+
+.radio-group {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 1px;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: normal;
+}
+
+.form-actions {
+  margin-top: 0px;
+  display: flex;
+  gap: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.btn.submit {
+  background: #e74c3c;
+  color: white;
+  transition: background 0.2s;
+}
+
+.btn.submit:hover {
+  background: #c0392b;
+}
+
+.btn.reset {
+  background: #ccc;
+}
+
+.btn.reset:hover {
+  background: #b3b3b3;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 800px) {
+  .container {
+    flex-direction: column;
+    height: auto;
+  }
+  .sidebar {
+    width: 100%;
+    padding: 20px 15px;
+  }
+  .main-content {
+    padding: 15px;
+  }
+  .form-section {
+    padding: 15px;
+  }
+}
